@@ -20,7 +20,7 @@ function LoginForm() {
         
         AuthService.login({username, password}).then(res => {
             if (res && res.status === 200) {
-                console.log(res)
+                console.log(res.data)
             }
         }).catch(err => {
             console.log(err);

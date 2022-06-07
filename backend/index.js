@@ -18,38 +18,30 @@ app.use(cors());
 
 app.post('/api/login', (req, res) => {
     const reqBody = req.body;
+const condition = {$or:[{username: reqBody.username},{password:reqBody.password}]}
+    const foundUsers = Users.find(condition,(error, result)=>{
+        res.send(result || "Nothing found")
+    })
 
-    const foundUser = Users.findOne(reqBody, (err, data) => {
-        console.log(data);
-        if (err) {
-            const errorMsg = `Error on getting user from DB: ${err}`;
-            res.send(errorMsg);
-            return;
-        }
-
-        // way 1
-        // if (data)
-        //     res.send(data);
-        // else
-        //     res.send('User not found.');
-
-        // way 2
-        // res.send(data ? data : 'User not found.');
-
-        // way 3
-        console.log(reqBody)
-        res.send(data || 'User not found.');
-    });
+    // const foundUser = Users.findOne(reqBody, (err, data) => {
+    //     console.log(data);
+    //     if (err) {
+    //         const errorMsg = `Error on getting user from DB: ${err}`;
+    //         res.send(errorMsg);
+    //         return;
+    //     }
+    //
+    //     console.log(reqBody)
+    //     res.send(data || 'User not found.');
+    // });
 })
 
 app.post('/api/register', async (req, res) => {
     const reqBody = req.body;
     console.log(reqBody)
-    let currentUserData = {
-        username: reqBody.username,
-        email: reqBody.email
-    }
-    Users.findOne(currentUserData, async (error, result) => {
+
+    const condition = {$or:[{username: reqBody.username},{password:reqBody.password}]}
+    Users.findOne(condition, async (error, result) => {
         if (error) {
             const errMsg = "Error on register";
             console.log(errMsg)
